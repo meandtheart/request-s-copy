@@ -1,0 +1,1258 @@
+/* Base Reset & Variables */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --accent-brown: #5c4d4c;  
+}
+
+html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden; /* Clips horizontal overflow permanently */
+      
+}
+
+body {
+    background-color: #fcf9f2;
+    color: var(--accent-brown);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    overflow: hidden; 
+    -webkit-font-smoothing: antialiased;
+    width: 100%;
+	max-width: 100%;
+    min-height: 130vh;
+	
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.page-bg {
+    position: fixed;
+    inset: 0;
+    background-color: #F2E8D9;
+    background-image:
+        radial-gradient(circle at 50% 40%, rgba(232, 217, 192, 0.7) 0%, transparent 50%),
+        radial-gradient(circle at 5% 90%, rgba(201, 151, 63, 0.35) 0%, transparent 40%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    
+    z-index: -1;
+}
+/* Header Styling */
+.shop-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;              /* Space between logo and button */
+    padding: 30px 20px;
+    background: transparent;
+    position: relative;
+    z-index: auto;
+}
+
+.logo {
+	position: fixed;
+	top: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+    font-family: 'Comfortaa', cursive; 
+    font-size: 2.3rem;
+    font-weight: 700; 
+    letter-spacing: 0px;
+    color: #735e59;
+	z-index: 10000;
+	
+	background: rgba(255, 255, 255, 0.15); 
+    backdrop-filter: blur(2px) saturate(120%);          
+    -webkit-backdrop-filter: blur(2px) saturate(120%);
+	
+	border: 1.5px solid rgba(255, 255, 255, 0.65);
+    border-radius: 30px; /* Soft, smooth corners */
+	
+	padding: 10px 28px;
+    display: inline-block;
+	
+	box-shadow: 
+        0 8px 20px rgba(92, 77, 76, 0.06),   
+        inset 0 1.5px 2px rgba(255, 255, 255, 0.9),  /* Top highlight */
+        inset 0 -1px 2px rgba(255, 255, 255, 0.3);  /* Bottom highlight */
+		
+}
+
+.explore-btn {
+	margin-top: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 480px;      /* Sleek, elongated look */
+    padding: 14px 30px;
+    
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none; /* Removes the default link underline */
+    
+    /* Filled theme coloring */
+    background-color: #ab9685;
+    color: #fcf9f2;        /* Cream white text color matching the body background */
+    
+    border: 3px solid #735e59;
+    border-radius: 30px;   /* Fully rounded pill shape */
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(92, 77, 76, 0.2);
+    transition: all 0.3s ease;
+}
+
+.explore-btn:hover {
+    background-color: #443736;
+    border-color: #ab9685;
+    box-shadow: 0 12px 24px rgba(92, 77, 76, 0.3);
+    transform: translateY(-2px);
+}
+
+
+.explore-btn:hover svg {
+    transform: translateX(4px);
+}
+
+.explore-btn svg {
+    transition: transform 0.2s ease;
+}
+
+.explore-btn:active {
+    transform: translateY(0);
+}
+
+.hero-text {
+    position: absolute;
+    top: 45%;                  /* Vertically centers it relative to the wheel */
+    left: 8%;                  /* Anchors it nicely on the left side */
+    transform: translateY(-50%);
+    max-width: 450px;
+	text-align: left;
+    z-index: 5;                /* Same level as the wheel */
+    
+    color: #4a443f;
+	pointer-events: none;
+}
+
+.hero-text h1 {
+    font-family: 'Fredoka','Comfortaa', cursive, sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.15;
+	letter-spacing: 0.5px;
+    margin-bottom: 14px;
+	color: #735e59;
+}
+
+.hero-text p {
+	font-family: system-ui, -apple-system, sans-serif;
+    font-size: 1.05rem;
+	line-height: 1.5;
+    opacity: 0.85;
+}
+
+/* Wheel Container Placement */
+.wheel-container {
+    position: absolute;
+    top: 180px; 
+    right: -170px; 
+    width: 350px;
+    height: 350px;
+    z-index: 1;
+    pointer-events: auto;
+	transform: translateY(-50%);
+}
+
+/* The Wheel Track */
+.wheel {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: transparent;
+    position: relative;
+    will-change: transform;
+}
+
+/* Positioning wrapper: places each gondola around the wheel circle.
+   This element spins WITH the wheel (that's what makes it orbit). */
+.wheel-head-pos {
+    position: absolute;
+    width: 75px;
+    height: 75px;
+    top: calc(50% - 37.5px);
+    left: calc(50% - 37.5px);
+    transform: rotate(var(--angle)) translate(140px);
+}
+
+/* Content wrapper: counter-rotates by the exact opposite of the wheel's
+   live rotation (plus its own placement angle), so the circle + label
+   inside always stay upright, like a Ferris wheel gondola. */
+.wheel-content {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    transform: rotate(calc(-1 * (var(--angle) + var(--rotation, 0deg))));
+    transition: transform 0.05s linear;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Thicker-looking glass profile */
+.wheel-head {
+    width: 75px;  
+    height: 75px; 
+    
+    background: rgba(255, 255, 255, 0.55); 
+    backdrop-filter: blur(1px) saturate(140%);          
+    -webkit-backdrop-filter: blur(1px) saturate(140%);  
+    
+    border: 3px solid #c2b19c; 
+    
+    color: var(--accent-brown);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 600; 
+    
+    box-shadow: 
+        0 15px 35px rgba(92, 77, 76, 0.12),   
+        0 5px 15px rgba(0, 0, 0, 0.04),        
+        inset 0 2px 4px rgba(255, 255, 255, 0.5); 
+    
+    transition: background-color 0.2s ease;
+}
+
+/* Spacing layout positions — each item's fixed angle around the wheel */
+.head-1 { --angle: 0deg; }
+.head-2 { --angle: 45deg; }
+.head-3 { --angle: 90deg; }
+.head-4 { --angle: 135deg; }
+.head-5 { --angle: 180deg; }
+.head-6 { --angle: 225deg; }
+.head-7 { --angle: 270deg; }
+.head-8 { --angle: 315deg; }
+  
+/* Makes the image completely fill the entire glass circle */
+.wheel-head img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;     
+    border-radius: 50%;    
+    display: block;
+    pointer-events: none;  
+}
+/* Cart Button Base Layout */
+/* Cart Button - same style as first page */
+.cart-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 48px;
+    height: 48px;
+
+    color: #735e59;
+    background: none;
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.cart-btn:hover {
+    color: #ab9685;
+    transform: scale(1.15);
+}
+
+.cart-btn svg {
+    width: 28px;
+    height: 28px;
+	filter: drop-shadow(0 0 0.3px currentColor);
+}
+
+/* Quantity Counter Badge resting over the logo */
+.cart-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+
+    background: #7a5c42;
+    color: white;
+
+    font-size: 0.65rem;
+    font-weight: 700;
+
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    border: 2px solid #fcf9f2;
+}
+
+.wheel-label {
+    position: absolute;
+    
+    /* Pushes text completely below the 75px circle boundary */
+    top: 75px; 
+    
+    /* Centers the text horizontally relative to the circle */
+    left: 50%;
+    transform: translateX(-50%);
+    
+    /* Typography & Styling */
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--accent-brown);
+    white-space: nowrap;  /* Keeps the name on one single line */
+    
+    /* Layout Safety */
+    pointer-events: none; /* Prevents text selection from breaking dragging */
+    text-align: center;
+}
+
+/* Glass Plate Container for Instagram and Cart Buttons */
+.header-actions {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px; /* Spacing between the buttons inside the plate */
+    padding: 4px 8px; /* Padding inside the glass plate */
+
+    /* Clear Glassmorphism Styling */
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(2px) saturate(120%);
+    -webkit-backdrop-filter: blur(2px) saturate(120%);
+
+    /* Plate Borders & Radius matching the logo */
+    border-radius: 30px;
+    border: 1.5px solid rgba(255, 255, 255, 0.65);
+
+    /* Subtle Light Edge Reflection */
+    box-shadow: 
+        0 8px 20px rgba(92, 77, 76, 0.06),   
+        inset 0 1.5px 2px rgba(255, 255, 255, 0.9),
+        inset 0 -1px 2px rgba(255, 255, 255, 0.3);
+}
+
+/* ===============================
+   MOBILE RESPONSIVE OVERRIDES
+   ===============================*/
+  @media (max-width: 600px) {
+
+    /* 1. Header & Typography Adjustments */
+    .shop-header {
+        padding: 15px 15px;
+        gap: 12px;
+    }
+
+    .logo {
+        font-size: 2rem;
+		padding: 8px 20px;
+		border-radius: 30px;
+    }
+
+    .explore-btn {
+        max-width: 300px;
+        padding: 10px 20px;
+        font-size: 0.88rem;
+    }
+
+   
+    .wheel-container {
+        position: absolute;
+        top: 110px; 
+        right: -170px;          /* Exactly half of 340px width */
+        width: 340px;
+        height: 340px;
+        z-index: 5;
+        pointer-events: auto;
+        touch-action: none;
+        transform: translateY(-50%);
+    }
+
+
+    .wheel-head-pos {
+        width: clamp(56px, 18vw, 70px);
+        height: clamp(56px, 18vw, 70px);
+        top: calc(50% - clamp(28px, 9vw, 35px));
+        left: calc(50% - clamp(28px, 9vw, 35px));
+        /* Orbit radius of 125px places 3 heads fully in view & 2 peeking */
+        transform: rotate(var(--angle)) translate(clamp(95px, 30vw, 125px)); 
+    }
+
+    .wheel-head {
+        width: clamp(56px, 18vw, 70px);
+        height: clamp(56px, 18vw, 70px);
+        border-width: 2.5px;
+        box-shadow: 0 8px 20px rgba(92, 77, 76, 0.15);
+    }
+
+    .wheel-label {
+        top: clamp(58px, 19vw, 73px);              /* Just below the 70px circle */
+        font-size: clamp(0.65rem, 2.2vw, 0.75rem);
+        color: #5c4d4c;
+        text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8); /* Helps readability */
+    }
+	
+	
+	.header-actions {
+        padding: 2px 6px;
+        gap: 2px;
+    }
+	
+	.hero-section {
+    position: relative; /* This acts as an anchor for the wheel */
+    width: 100%;
+    min-height: 380px;
+    }
+
+    .hero-text {
+        position: relative;
+        top: 2%;
+        left: 0;
+        transform: none;
+        text-align: left;
+        padding: 0 24px;
+        margin-top: 15px;
+		max-width: 100%;
+    }
+
+    .hero-text h1 {
+        font-size: 2.8rem;
+    }
+	
+    .hero-text p {
+        font-size: 0.9rem;
+    }
+	
+	
+    .section-title {
+		
+        transform: translateY(-55px);
+        font-size: 1.3rem;
+		color: #4a443f;
+    }
+	
+	.stack-container {
+        position: relative;
+		width: 100%;
+		z-index: 10;
+		transform: translateY(-130px);
+    }
+    .stack-card {
+        width: 120px;
+		border-width: 2.5px;
+		border-radius: 22px;
+    }
+    .stack-card.slot-mid-left { transform: translateX(-65px) scale(0.85); }
+    .stack-card.slot-mid-right { transform: translateX(65px) scale(0.85); }
+    .stack-card.slot-far-left { transform: translateX(-120px) scale(0.7); }
+    .stack-card.slot-far-right { transform: translateX(120px) scale(0.7); }
+
+
+  }
+
+@media (max-width: 380px) {
+    .logo {
+        font-size: 1.8rem;
+    }
+
+    .explore-btn {
+        max-width: 270px;
+        padding: 9px 16px;
+        font-size: 0.8rem;
+    }
+
+    .shop-header {
+        padding: 12px 12px;
+        gap: 10px;
+    }
+} 
+   
+    .header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px; /* Adjust spacing between Instagram and Cart buttons */
+}  
+   
+   
+   
+   .section-title {
+   
+    font-family: 'Fredoka', 'Comfortaa', cursive, sans-serif;
+    
+    /* Medium, fluid size */
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #4a443f; 
+    text-align: center;
+    width: 100%;
+    letter-spacing: 0.5px;
+    opacity: 0.9;
+	margin-top: 15vh; 
+    margin-bottom: 20px;
+    width: 100%;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+
+
+
+.stack-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    height: 380px;
+    margin: 40px auto 60px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px;
+    touch-action: pan-y;
+    z-index: 10;
+	overflow: hidden;
+}
+
+/* Individual Vertical Card Base */
+.stack-card {
+    position: absolute;
+    width: 170px;
+    aspect-ratio: 3 / 4;
+    border-radius: 28px;
+    border: 3.5px solid #fff5ea;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 
+        0 0 0 2px #c9b5a1,                        
+        0 12px 24px -4px rgba(115, 94, 89, 0.25), 
+        inset 0 0 0 1.5px rgba(255, 255, 255, 0.8);
+    transition: transform 0.4s ease, filter 0.4s ease, opacity 0.4s ease, z-index 0.4s ease;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-drag: none;
+	touch-action: pan-y;
+}
+
+.stack-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+/* --- THE 5 STACK SLOTS --- */
+
+/* 1. Center Image (Front) */
+.stack-card.slot-center {
+    z-index: 5;
+    transform: translateX(0) scale(1.1);
+    filter: none;
+    opacity: 1;
+}
+
+/* 2. Middle-Left (Behind center) */
+.stack-card.slot-mid-left {
+    z-index: 3;
+    transform: translateX(-110px) scale(0.9);
+    filter: none; 
+    opacity: 0.95;
+}
+
+/* 3. Middle-Right (Behind center) */
+.stack-card.slot-mid-right {
+    z-index: 3;
+    transform: translateX(110px) scale(0.9);
+    filter: none;
+    opacity: 0.95;
+}
+
+/* 4. Far-Left (Furthest back) */
+.stack-card.slot-far-left {
+    z-index: 1;
+    transform: translateX(-200px) scale(0.75);
+    filter: none; 
+    opacity: 0.95;
+}
+
+/* 5. Far-Right (Furthest back) */
+.stack-card.slot-far-right {
+    z-index: 1;
+    transform: translateX(200px) scale(0.75);
+    filter: none;
+    opacity: 0.95;
+}
+
+/* Pop-up Overlay Background */
+.image-modal {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    
+    /* Warm dark tint + high blur */
+    background: rgba(40, 32, 28, 0.45);
+    backdrop-filter: blur(12px) saturate(130%);
+    -webkit-backdrop-filter: blur(12px) saturate(130%);
+    
+    /* Smooth fade in/out instead of instant display */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s ease;
+}
+
+.image-modal.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* The Pop-up Image */
+.modal-content {
+    max-width: 85%;
+    max-height: 80vh;
+	height: auto;
+	margin: auto;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    object-fit: contain;
+    animation: slideToCenter 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.modal-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px;
+    max-width: 90%;
+    width: 360px;
+    
+    /* Claymorphism container */
+    background: #fcf9f2;
+    border-radius: 30px;
+    box-shadow: 
+        12px 12px 24px rgba(139, 111, 92, 0.25),
+        -12px -12px 24px rgba(255, 255, 255, 0.9);
+    animation: slideToCenter 0.35s ease-out forwards;
+}
+
+.modal-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 360px;
+    padding: 20px;
+    
+    /* Organic cozy card styling */
+    background: linear-gradient(145deg, #fefcf7, #f6f0e4);
+    border-radius: 32px;
+    border: 1.5px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 20px 40px -10px rgba(60, 45, 35, 0.3);
+    
+    /* Soft physics spring animation */
+    transform: scale(0.82) translateY(30px);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.image-modal.active .modal-wrapper {
+    transform: scale(1) translateY(0);
+	
+}
+
+/* Close Button (X) */
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    
+    /* Subtle Frosted Glass Effect */
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1.5px solid rgba(255, 255, 255, 0.8);
+    
+    /* Text / Icon alignment */
+    color: #5c4d4c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 20;
+    
+    /* Soft elevation shadow */
+    box-shadow: 0 4px 12px rgba(92, 77, 76, 0.12);
+    transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.85);
+    color: #2c2625;
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 6px 16px rgba(92, 77, 76, 0.2);
+}
+
+.modal-close:active {
+    transform: scale(0.95);
+}
+
+/* Clean Minimalist White Product Title */
+.modal-title {
+    font-family: 'Fredoka', 'Comfortaa', cursive, sans-serif;
+    color: #5c4d4c;
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    text-align: center;
+    padding: 8px 18px;
+    
+    /* Soft Claymorphism Pill Style */
+    background: #fcf9f2;
+    border-radius: 20px;
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.12),
+        inset 1.5px 1.5px 2px #ffffff,
+        inset -1.5px -1.5px 2px rgba(139, 111, 92, 0.15);
+		
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transform: translateZ(0);
+}
+
+/* Clean Minimalist White Product Price */
+.modal-price {
+    font-family: inherit;
+    color: #735e59;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    margin-bottom: 18px;
+    text-align: center;
+    padding: 6px 14px;
+    
+    /* Clay Pill Tag Style */
+    background: #e6ded3;
+    border-radius: 16px;
+    box-shadow: 
+        0 3px 6px rgba(0, 0, 0, 0.1),
+        inset 1px 1px 2px #ffffff,
+        inset -1px -1px 2px rgba(92, 77, 76, 0.15);
+		
+	-webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+     transform: translateZ(0);	
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    max-width: 300px;
+}
+
+.clay-btn {
+    flex: 1;
+    padding: 11px 16px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 18px;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+}
+
+.btn-cart {
+    background: #e6ded3;
+    color: #5c4d4c;
+    box-shadow: 
+        3px 4px 10px rgba(0, 0, 0, 0.35),
+        inset 1px 1px 2px rgba(255, 255, 255, 0.2);
+}
+
+.btn-buy {
+    background: #ab9685;
+    color: #ffffff;
+    box-shadow: 
+        3px 4px 10px rgba(0, 0, 0, 0.35),
+        inset 1px 1px 2px rgba(255, 255, 255, 0.2);
+}
+
+.clay-btn:active {
+    transform: scale(0.96);
+    box-shadow: 
+        inset 3px 3px 6px rgba(0, 0, 0, 0.15),
+        inset -3px -3px 6px rgba(255, 255, 255, 0.5);
+}
+/* Smooth Zoom-In Animation */
+@keyframes slideToCenter {
+    0% {
+        opacity: 0;
+        transform: translateY(120px) scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* 2. SCATTER / FALL DOWN EFFECT FOR THE BACKGROUND CARDS */
+.stack-container.modal-active .stack-card {
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+    opacity: 0 !important;
+}
+
+/* Send left cards sliding out to the left */
+.stack-container.modal-active .slot-far-left,
+.stack-container.modal-active .slot-mid-left {
+    transform: translateX(-160px) translateY(50px) rotate(-8deg) scale(0.7) !important;
+}
+
+/* Send right cards sliding out to the right */
+.stack-container.modal-active .slot-mid-right,
+.stack-container.modal-active .slot-far-right {
+    transform: translateX(160px) translateY(50px) rotate(8deg) scale(0.7) !important;
+}
+
+/* Drop the center card downward */
+.stack-container.modal-active .slot-center {
+    transform: translateY(80px) scale(0.6) !important;
+}
+
+
+
+
+/* =========================================================================
+   CUSTOM ORDER BUTTON & MODAL
+   ========================================================================= */
+
+/* Trigger Button Layout */
+.custom-order-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 0 20px;
+    margin: 10px auto 40px auto;
+    position: relative;
+    z-index: 10;
+}
+
+.custom-order-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 100%;
+    max-width: 440px;
+    padding: 14px 24px;
+    
+    /* Matte terracotta/clay base color */
+    background: #e6ded3; 
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    
+    /* Claymorphism: Dark outer drop shadow + Warm inner depth (no bright white glow) */
+    box-shadow: 
+        6px 6px 14px rgba(92, 77, 76, 0.25),            /* Soft outer drop shadow */
+        inset 2.5px 2.5px 4px rgba(255, 255, 255, 0.45), /* Top-left light edge */
+        inset -3px -3px 6px rgba(0, 0, 0, 0.18);
+        
+    transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.custom-order-btn:hover {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 
+        8px 8px 20px rgba(139, 111, 92, 0.25),
+        -8px -8px 20px rgba(255, 255, 255, 0.9),
+        inset 1.5px 1.5px 2px #ffffff;
+}
+
+.custom-order-btn:active {
+    transform: translateY(2px) scale(0.98);
+    box-shadow: 
+        inset 3px 3px 6px rgba(0, 0, 0, 0.25),
+        inset -2px -2px 4px rgba(255, 255, 255, 0.5);
+}
+
+.custom-title {
+    font-family: 'Fredoka', 'Comfortaa', cursive, sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #5c4d4c;
+}
+
+.custom-subtitle {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 0.82rem;
+    color: #735e59;
+    opacity: 0.85;
+}
+
+/* Modal Overlay Base */
+.custom-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(40, 32, 28, 0.45);
+    backdrop-filter: blur(10px) saturate(120%);
+    -webkit-backdrop-filter: blur(10px) saturate(120%);
+    
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.custom-modal.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* Modal Popup Card */
+.custom-modal-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 360px;
+    padding: 28px 24px 24px 24px;
+    
+    /* Solid, warm clay tone instead of gradient */
+    background: #f2ebd9; 
+    border-radius: 32px;
+    border: 2px solid #735e59;
+    
+    /* Soft matte clay depth */
+    box-shadow: 
+        8px 12px 24px rgba(60, 45, 35, 0.2),
+        inset 2px 2px 5px rgba(255, 255, 255, 0.7),
+        inset -4px -4px 8px rgba(139, 111, 92, 0.15);
+    
+    transform: scale(0.85) translateY(20px);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.custom-modal.active .custom-modal-card {
+    transform: scale(1) translateY(0);
+}
+
+.custom-modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    color: #5c4d4c;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.custom-modal-close:hover {
+    background: #ffffff;
+    transform: scale(1.08);
+}
+
+.custom-modal-heading {
+    font-family: 'Fredoka', 'Comfortaa', cursive, sans-serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #5c4d4c;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.custom-modal-text {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    color: #735e59;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.custom-modal-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px 20px;
+    
+    font-family: 'Fredoka', 'Comfortaa', cursive, sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #ffffff;
+    text-decoration: none;
+    background: #ab9685;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(92, 77, 76, 0.2);
+    transition: all 0.2s ease;
+}
+
+.custom-modal-btn:hover {
+    background: #443736;
+    transform: translateY(-1px);
+}
+
+/* Mobile Alignment Adjustments */
+@media (max-width: 600px) {
+    .custom-order-wrapper {
+        margin-top: -200px;
+    }
+    
+    .custom-title {
+        font-size: 0.98rem;
+    }
+    
+    .custom-subtitle {
+        font-size: 0.75rem;
+    }
+}
+
+
+/* =========================================================================
+   FLOATING REAL CLAY NAVIGATION BAR
+   ========================================================================= */
+.floating-nav {
+    position: fixed;
+    /* Adjust this distance from the bottom as needed */
+    bottom: calc(20px + env(safe-area-inset-bottom)); 
+    left: 50%;
+    transform: translateX(-50%);
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 10px;
+    
+    width: calc(100% - 48px);
+    max-width: 320px;
+    padding: 10px 14px;
+    
+    /* Clay Material Styling */
+    background: #f7efe3; /* Soft cream ceramic base */
+    border-radius: 50px; /* Smooth rounded clay pill */
+    border: 2px solid #ffffff;
+    
+    /* 3D Clay Elevation: Soft outer drop shadow + Dual inner shadows for 3D puff volume */
+    box-shadow: 
+        0 14px 28px rgba(115, 94, 89, 0.22),           /* Soft floor elevation shadow */
+        inset -4px -4px 8px rgba(184, 161, 149, 0.45),  /* Inner shadow bottom-right for depth */
+        inset 4px 4px 8px rgba(255, 255, 255, 0.95);    /* Inner top-left highlight for bulbous volume */
+        
+    z-index: 500;
+}
+
+/* Clay Navigation Items */
+.floating-nav .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    
+    flex: 1;
+    padding: 8px 0;
+    text-decoration: none;
+    color: #735e59;
+    font-family: 'Fredoka', 'Comfortaa', cursive, sans-serif; /* Matching your site fonts */
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 30px;
+    
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy fluid transition */
+    -webkit-tap-highlight-color: transparent;
+}
+
+.floating-nav .nav-item svg {
+    width: 22px;
+    height: 22px;
+    transition: transform 0.25s ease;
+}
+
+/* Hover & Tap Animations */
+.floating-nav .nav-item:hover {
+    color: #5c4d4c;
+    transform: translateY(-3px);
+}
+
+.floating-nav .nav-item:active {
+    transform: scale(0.92);
+}
+
+/* Active Page Clay Button Highlight */
+.floating-nav .nav-item.active {
+    color: #5c4d4c;
+    background: #f2e4d3; /* Slightly darker recessed clay color */
+    
+    /* Pressed inset clay effect */
+    box-shadow: 
+        inset 3px 3px 6px rgba(139, 111, 92, 0.35),
+        inset -3px -3px 6px rgba(255, 255, 255, 0.9);
+}
+
+.floating-nav .nav-item.active svg {
+    transform: scale(1.1);
+}
+
+
+
+/* =========================================================================
+   COMPACT FULL-WIDTH FOOTER
+   ========================================================================= */
+.site-footer {
+    width: 100%;
+    margin-top: 40px;
+    padding: 24px 16px 85px 16px; /* Reduced from 120px to a tight 85px */
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(10px) saturate(120%);
+    -webkit-backdrop-filter: blur(10px) saturate(120%);
+    border-top: 1.5px solid rgba(255, 255, 255, 0.65);
+    box-shadow: 0 -4px 16px rgba(92, 77, 76, 0.03);
+}
+
+.footer-content {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.footer-logo {
+    font-family: 'Comfortaa', cursive, sans-serif;
+    font-size: 1.5rem; /* Slightly smaller logo */
+    font-weight: 700;
+    color: #5c4d4c;
+    margin-bottom: 4px;
+}
+
+.footer-bio {
+    font-family: 'Fredoka', 'Comfortaa', cursive, sans-serif;
+    font-size: 0.88rem;
+    color: #735e59;
+    max-width: 420px;
+    line-height: 1.35;
+    margin-bottom: 14px;
+}
+
+/* Side-by-side Links */
+.footer-links-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.footer-link {
+    font-family: 'Fredoka', cursive, sans-serif;
+    font-size: 0.88rem;
+    color: #735e59;
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.footer-link:hover {
+    color: #ab9685;
+    transform: translateY(-1px);
+}
+
+.footer-dot {
+    color: #c2a38a;
+    font-size: 0.75rem;
+}
+
+/* Social Buttons Row */
+.footer-socials-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.social-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #fffaf3;
+    color: #735e59;
+    border: 1.5px solid #c2a38a;
+    box-shadow: 0 2px 6px rgba(115, 94, 89, 0.06);
+    transition: all 0.25s ease;
+    text-decoration: none;
+}
+
+.social-btn:hover {
+    background: #ab9685;
+    color: #fffaf3;
+    border-color: #ab9685;
+    transform: translateY(-2px);
+}
+
+/* Copyright Line */
+.footer-copyright {
+    font-family: 'Fredoka', cursive, sans-serif;
+    font-size: 0.78rem;
+    color: #8c706b;
+    opacity: 0.85;
+}

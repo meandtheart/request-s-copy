@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop All Creations — Yaeneko</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+
+    <style>
+        .shop-container {
+            max-width: 1200px;
+            margin: 60px auto 0 auto;
+            padding: 20px 16px 140px 16px;
+        }
+
+        .shop-title {
+            font-family: 'Fredoka', 'Comfortaa', cursive, sans-serif;
+            font-size: 1.8rem;
+            color: #5c4d4c;
+            text-align: center;
+            margin: 20px 0 30px 0;
+        }
+		
+		
+/* Cat Silhouette Search Bar (Color-Matched to Yaeneko) */
+.search-container {
+    max-width: 440px;
+    margin: 22px auto 26px auto;
+    display: flex;
+    align-items: center;
+    background: #fffaf3;
+    border: 2px solid #c2a38a;
+    border-radius: 999px;
+    padding: 6px 8px 6px 18px;
+    position: relative;
+    box-shadow: 0 6px 14px rgba(140, 112, 100, 0.12);
+    transition: all 0.25s ease;
+}
+
+/* Tiny Kitty Ears on top of the search bar */
+.search-container::before,
+.search-container::after {
+    content: '';
+    position: absolute;
+    top: -17px;
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 18px solid #fffaf3;
+    z-index: 1;
+}
+
+.search-container::before {
+    left: 28px;
+    transform: rotate(-12deg);
+}
+
+.search-container::after {
+    left: 48px;
+    transform: rotate(12deg);
+}
+
+.search-container:focus-within {
+    border-color: #ab9685;
+    background: #ffffff;
+    box-shadow: 0 8px 20px rgba(140, 112, 100, 0.18);
+}
+
+.search-input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    outline: none;
+    padding: 6px 4px;
+    font-family: 'Fredoka', 'Comfortaa', cursive, sans-serif;
+    font-size: 0.95rem;
+    color: #5c4d4c;
+    z-index: 2;
+}
+
+.search-input::placeholder {
+    color: #bfaea2;
+}
+
+.search-btn {
+    background: #ab9685;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #fffaf3;
+    flex-shrink: 0;
+    z-index: 2;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.search-btn:hover {
+    background-color: #97826f;
+    transform: scale(1.08) rotate(5deg);
+}
+
+.search-btn svg {
+    width: 16px;
+    height: 16px;
+}
+        /* Cozy Scrapbook Grid — mobile-first */
+        .pinterest-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px 16px;
+            padding-top: 6px;
+        }
+
+        @media (min-width: 600px) {
+            .pinterest-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 26px 20px;
+            }
+        }
+
+        @media (min-width: 900px) {
+            .pinterest-grid {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                gap: 26px 20px;
+            }
+        }
+
+        /* Cute Scrapbook Pin Card */
+        .pin-card {
+            background: #fffaf3;
+            border-radius: 26px 12px 26px 12px;
+            overflow: visible;
+            box-shadow: 0 8px 18px rgba(140, 112, 100, 0.14);
+            transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.25s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 7px 7px 0 7px;
+            transform: rotate(-1.5deg);
+        }
+
+        .pin-card:nth-child(3n) {
+            border-radius: 12px 26px 12px 26px;
+            transform: rotate(1.5deg);
+        }
+
+        .pin-card:nth-child(3n+1) {
+            transform: rotate(-1deg);
+        }
+
+        .pin-card:hover,
+        .pin-card:active {
+            transform: rotate(0deg) translateY(-4px) scale(1.02);
+            box-shadow: 0 14px 24px rgba(140, 112, 100, 0.2);
+        }
+
+        /* Washi tape accent */
+        .pin-card::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-4deg);
+            width: 46px;
+            height: 16px;
+            background: rgba(194, 163, 138, 0.55);
+            border-radius: 3px;
+            box-shadow: 0 1px 2px rgba(92, 77, 76, 0.15);
+        }
+
+        .pin-card:nth-child(3n)::before {
+            transform: translateX(-50%) rotate(4deg);
+            background: rgba(233, 200, 178, 0.65);
+        }
+
+        .pin-img-wrapper {
+            width: 100%;
+            aspect-ratio: 4 / 5;
+            position: relative;
+            z-index: 1;
+            background-color: #f7efe3;
+            border-radius: 20px 8px 20px 8px;
+        }
+
+        .pin-card:nth-child(3n) .pin-img-wrapper {
+            border-radius: 8px 20px 8px 20px;
+        }
+
+        .pin-card img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            border-radius: 20px 8px 20px 8px;
+            transition: transform 0.4s ease;
+        }
+
+        .pin-card:nth-child(3n) img {
+            border-radius: 8px 20px 8px 20px;
+        }
+
+        .pin-card:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Sticker-style price badge */
+        .pin-price-badge {
+            position: absolute;
+            bottom: -10px;
+            right: -8px;
+            background: #ab9685;
+            color: #fffaf3;
+            font-family: 'Fredoka', 'Comfortaa', cursive, sans-serif;
+            font-weight: 600;
+            font-size: 0.72rem;
+            padding: 5px 10px;
+            border-radius: 999px;
+            box-shadow: 0 3px 8px rgba(92, 77, 76, 0.25);
+            transform: rotate(-6deg);
+            white-space: nowrap;
+            z-index: 2;
+        }
+
+        .pin-info {
+            padding: 12px 4px 16px 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+			gap: 2px;
+            text-align: center;
+        }
+
+        .pin-title {
+            font-family: 'Fredoka', 'Comfortaa', cursive, sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #5c4d4c;
+            margin: 0;
+        }
+
+        /* Product Pop-up Modal Styling */
+       .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(6px);
+    display: flex; /* Always flex to support smooth transition */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 16px;
+    opacity: 0;
+    pointer-events: none; /* Prevents clicks while hidden */
+    transition: opacity 0.3s ease;
+}
+
+        .modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+       .modal-card {
+    background: #ffffff;
+    border-radius: 28px;
+    max-width: 480px;
+    width: 100%;
+    padding: 24px;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    
+    /* Animation initial state (shifted up off-screen) */
+    transform: translateY(-80px);
+    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+    .modal-overlay.active .modal-card {
+    /* End position: slides down to its normal place */
+    transform: translateY(0);
+}
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            border: none;
+            background: #f7efe3;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            color: #5c4d4c;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+    .modal-main-img {
+       width: 100%;
+       height: auto;
+       max-height: 400px;
+       object-fit: contain;
+       border-radius: 20px;
+       background-color: #f7efe3;
+}
+
+        .modal-thumbnails {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .modal-thumb {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .modal-thumb.active, .modal-thumb:hover {
+            border-color: #5c4d4c;
+            transform: scale(1.05);
+        }
+
+        .modal-details {
+            text-align: center;
+        }
+
+        .modal-title {
+            font-family: 'Fredoka', 'Comfortaa', cursive, sans-serif;
+            font-size: 1.4rem;
+            color: #5c4d4c;
+            margin: 0 0 6px 0;
+        }
+
+        .modal-price {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #8c706b;
+            margin: 0 0 16px 0;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-buy, .btn-basket {
+            flex: 0 1 auto;
+			min-width: 120px;
+			height: 38px;
+            padding: 0 16px;
+            border: none;
+            border-radius: 20px;
+            font-family: 'Fredoka', cursive, sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+			line-height: 1;
+            cursor: pointer;
+            transition: transform 0.2s ease, filter 0.2s ease;
+        }
+
+        .btn-buy {
+            background-color: #ab9685;
+            color: #ffffff;
+        }
+
+        .btn-basket {
+            background-color: #f7efe3;
+            color: #5c4d4c;
+            box-shadow: 
+                0 4px 10px rgba(115, 94, 89, 0.1),
+                inset -2px -2px 4px rgba(184, 161, 149, 0.3),
+                inset 2px 2px 4px rgba(255, 255, 255, 0.9);
+        }
+
+        .btn-buy:active, .btn-basket:active {
+            transform: scale(0.96);
+        }
+		
+    .shop-header {
+         position: relative;
+         z-index: 1;
+}
+
+        /* Category filter bar — shown when arriving via a wheel tap */
+        .filter-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            background: #fffaf3;
+            border-radius: 999px;
+            padding: 10px 18px;
+            margin: 0 0 22px 0;
+            box-shadow: 0 4px 12px rgba(140, 112, 100, 0.14);
+        }
+
+        .filter-label {
+            font-family: 'Comfortaa', sans-serif;
+            font-size: 0.85rem;
+            color: #8c7568;
+        }
+
+        .filter-label strong {
+            font-family: 'Fredoka', 'Comfortaa', cursive, sans-serif;
+            color: #5c4d4c;
+        }
+
+        .filter-clear {
+            font-family: 'Fredoka', 'Comfortaa', cursive, sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #fffaf3;
+            background: #ab9685;
+            border-radius: 999px;
+            padding: 6px 14px;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: background-color 0.2s ease;
+        }
+
+        .filter-clear:hover,
+        .filter-clear:active {
+            background: #97826f;
+        }
+
+        .empty-state {
+            text-align: center;
+            font-family: 'Comfortaa', sans-serif;
+            color: #8c7568;
+            padding: 40px 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-bg"></div>
+
+    <header class="shop-header">
+        <h1 class="logo">Yaeneko</h1>
+    </header>
+
+    <main class="shop-container">
+
+        <!--
+            HOW TO ADD A PRODUCT
+            ---------------------
+            Scroll down to the "PRODUCTS LIST" inside the <script> tag near
+            the bottom of this file. Just copy one line and edit it:
+
+            { title: "Your Product", price: "৳00", category: "Plushies", images: ["main.jpg", "extra1.jpg", "extra2.jpg"] },
+
+            - "images" is just a list of image filenames.
+            - The FIRST image in the list is the one shown on the shop card.
+            - Any extra images you add will show up as extra photos in the
+              pop-up when someone clicks the product.
+            - Add as many, or as few, extra images as you like.
+            - "category" must exactly match one of the wheel names on the
+              homepage (Plushies, Keychains, Hair Accessories, Figurines,
+              Flowers, Sanrio, Clips, Cat collars), so tapping that wheel
+              category shows this product.
+        -->
+		
+		
+		
+		<div class="search-container">
+    <input type="text" id="searchInput" class="search-input" placeholder="Search creations..." oninput="renderProducts()">
+    <button class="search-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+    </button>
+</div>
+
+
+        <div class="filter-bar" id="filterBar" style="display:none;">
+            <span class="filter-label">Showing: <strong id="filterCategoryName"></strong></span>
+            <a href="shop.html" class="filter-clear">View All</a>
+        </div>
+        <div class="pinterest-grid" id="productGrid"></div>
+        <p class="empty-state" id="emptyState" style="display:none;">No products in this category yet — check back soon!</p>
+    </main>
+
+    <div class="modal-overlay" id="productModal" onclick="closeModalOnOverlay(event)">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeProductModal()">&times;</button>
+            
+            <img id="modalMainImg" class="modal-main-img" src="" alt="Product Detail">
+            
+            <div class="modal-thumbnails" id="modalThumbnails"></div>
+
+            <div class="modal-details">
+                <h2 class="modal-title" id="modalTitle">Product Title</h2>
+                <p class="modal-price" id="modalPrice">BDT 0</p>
+                
+                <div class="modal-actions">
+                    <button class="btn-basket" id="modalAddToCart">Add to Basket</button>
+                    <button class="btn-buy" id="modalBuyNow">Buy Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	
+	<footer class="site-footer">
+    <div class="footer-content">
+        <h2 class="footer-logo">Yaeneko</h2>
+
+        <p class="footer-bio">
+            Handcrafted plushies & cozy creations made with warm pastel love.
+        </p>
+
+        <nav class="footer-links-row" aria-label="Footer Navigation">
+            <a href="about.html" class="footer-link">About Me</a>
+            <span class="footer-dot">•</span>
+            <a href="policies.html#order-policy" class="footer-link">Order Policy</a>
+            <span class="footer-dot">•</span>
+            <a href="policies.html#order-policy" class="footer-link">Shipping Policy</a>
+        </nav>
+
+        <div class="footer-socials-row">
+            <a href="https://www.instagram.com/yaeneko.bd?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" 
+               target="_blank" 
+               rel="noopener noreferrer" 
+               class="social-btn" 
+               aria-label="Instagram">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+            </a>
+
+            <a href="https://www.facebook.com/people/Yaenekobd/61579429420812/" 
+               target="_blank" 
+               rel="noopener noreferrer" 
+               class="social-btn" 
+               aria-label="Facebook">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                </svg>
+            </a>
+
+            <a href="https://www.tiktok.com/@yaeneko.bd" 
+               target="_blank" 
+               rel="noopener noreferrer" 
+               class="social-btn" 
+               aria-label="TikTok">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path>
+                </svg>
+            </a>
+        </div>
+
+        <p class="footer-copyright">© 2026 Yaeneko. All rights reserved.</p>
+    </div>
+</footer>
+
+    <nav class="floating-nav" aria-label="Main Navigation">
+        <a href="index.html" class="nav-item" aria-label="Home">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            <span>Home</span>
+        </a>
+
+        <a href="shop.html" class="nav-item active" aria-label="Shop">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7"/>
+                <rect x="14" y="3" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/>
+            </svg>
+            <span>Shop</span>
+        </a>
+
+        <a href="cart.html" class="nav-item" aria-label="Cart">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1"/>
+        <circle cx="20" cy="21" r="1"/>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+    </svg>
+    <span>Cart</span>
+</a>
+    </nav>
+
+    <script>
+
+// =====================================================================
+// PRODUCTS LIST — add, remove, or edit products here. Nothing else in
+// this file needs to change.
+//
+// Each product looks like this:
+//   { title: "Product Name", price: "BDT00", images: ["photo1.jpg", "photo2.jpg"] }
+//
+// - "images" is a simple list of image filenames.
+// - The FIRST image is used as the product's thumbnail on the shop page.
+// - Any extra images after the first will appear as extra photos when a
+//   shopper clicks the product (great for showing different angles).
+// =====================================================================
+// "category" must be one of the exact names used on the homepage wheel:
+// Plushies, Keychains, Hair Accessories, Figurines, Flowers, Sanrio, Clips, Cat collars
+// (I've guessed a category for each existing product below based on the
+// name alone — please skim through and fix any that are wrong!)
+const PRODUCTS = [
+    { title: "Spiderman", price: "BDT 25", category: "Figurines", images: ["Spiderman.jpg", "Spiderman1.jpg", "Spiderman2.jpg", "Spiderman3.jpg"] },
+    { title: "Bow Hair Clip", price: "BDT 28", category: "Clips", images: ["Clip.jpg", "Clip1.jpg", "Clip2.jpg"] },
+    { title: "Sunflower", price: "BDT 22", category: "Flowers", images: ["Sunflower.jpg", "Sunflower1.jpg"] },
+    { title: "Batkid", price: "BDT 30", category: "Figurines", images: ["Batkid.jpg", "Batkid1.jpg", "Batkid2.jpg", "Batkid3.jpg"] },
+    { title: "Puff", price: "BDT 26", category: "Keychains", images: ["Puff.jpg", "Puff1.jpg", "Puff2.jpg"] },
+
+    // --- Copy the line below to add a new product ---
+    { title: "Patrik", price: "BDT 30", category: "Figurines", images: ["Patrik.jpg", "Patrik1.jpg", "Patrik2.jpg", "Patrik3.jpg"] },
+    { title: "Totoro", price: "BDT 300", category: "Plushies", images: ["Totoro.jpg", "Totoro1.jpg","Totoro2.jpg",] },
+    { title: "FROGGY", price: "BDT 200", category: "Plushies", images: ["FROGGY.jpg", "FROGGY1.jpg","FROGGY2.jpg","FROGGY3.jpg",] },
+    { title: "Bouquet", price: "BDT 500", category: "Flowers", images: ["Bouquet.jpg", "Bouquet1.jpg", "Bouquet2.jpg"] },
+    { title: "Teddy", price: "BDT 500", category: "Plushies", images: ["Teddy.jpg", "Teddy1.jpg", "Teddy2.jpg"] },
+    { title: "Angry hair clip", price: "BDT 100", category: "Clips", images: ["Angry hair clip.jpg", "Angry hair clip1.jpg","Angry hair clip2.jpg",] },
+    { title: "Black Rose", price: "BDT 200", category: "Flowers", images: ["Black Rose.jpg", "Black Rose1.jpg","Black Rose2.jpg"] },
+    { title: "Battulip", price: "BDT 500", category: "Flowers", images: ["Battulip.jpg", "Battulip1.jpg","Battulip2.jpg"] },
+    { title: "Froggy jr", price: "BDT 900", category: "Plushies", images: ["Froggy jr.jpg"] },
+    { title: "Beanie", price: "BDT 200", category: "Hair Accessories", images: ["Beanie.jpg", "Beanie1.jpg"] },
+    { title: "Takiyakis", price: "BDT 500", category: "Keychains", images: ["Takiyakis.jpg", "Takiyakis1.jpg"] },
+    { title: "Strawberries", price: "BDT 500", category: "Keychains", images: ["Strawberries.jpg", "Strawberries1.jpg"] },
+	
+];
+
+// Builds all the product cards on the shop page from the PRODUCTS list above.
+// (Built with plain DOM methods so image filenames or titles never need any
+// special escaping — just edit the PRODUCTS list, nothing else.)
+// Reads ?category=... from the URL so a wheel tap on the homepage can
+// land here already filtered down to just that category.
+function getCategoryFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('category');
+}
+
+function renderProducts() {
+    const grid = document.getElementById('productGrid');
+    const emptyState = document.getElementById('emptyState');
+    const filterBar = document.getElementById('filterBar');
+    const filterCategoryName = document.getElementById('filterCategoryName');
+    
+    // Read search input value
+    const searchQuery = document.getElementById('searchInput') 
+        ? document.getElementById('searchInput').value.toLowerCase().trim() 
+        : '';
+
+    grid.innerHTML = '';
+    const activeCategory = getCategoryFromURL();
+
+    if (activeCategory) {
+        filterBar.style.display = 'flex';
+        filterCategoryName.textContent = activeCategory;
+    } else {
+        filterBar.style.display = 'none';
+    }
+
+    // Filter by both Category and Search Query
+    const productsToShow = PRODUCTS.filter(p => {
+        const matchesCategory = activeCategory ? p.category === activeCategory : true;
+        const matchesSearch = p.title.toLowerCase().includes(searchQuery);
+        return matchesCategory && matchesSearch;
+    });
+
+    emptyState.style.display = productsToShow.length === 0 ? 'block' : 'none';
+
+    productsToShow.forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'pin-card';
+        card.onclick = () => openProductModal(product.title, product.price, product.images);
+
+        card.innerHTML = `
+            <div class="pin-img-wrapper">
+                <img src="${product.images[0]}" alt="${product.title}">
+                <span class="pin-price-badge">${product.price}</span>
+            </div>
+            <div class="pin-info">
+                <h3 class="pin-title">${product.title}</h3>
+            </div>
+        `;
+
+        grid.appendChild(card);
+    });
+}
+
+renderProducts();
+
+// Holds the product currently shown in the pop-up so the Buy Now /
+// Add to Basket buttons know exactly what to save to the cart.
+let currentProduct = null;
+
+function openProductModal(title, price, imageList) {
+    currentProduct = { title, price, images: imageList };
+
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalPrice').textContent = price;
+    
+    const mainImg = document.getElementById('modalMainImg');
+    mainImg.src = imageList[0];
+
+    const thumbContainer = document.getElementById('modalThumbnails');
+    thumbContainer.innerHTML = '';
+
+    imageList.forEach((imgSrc, index) => {
+        const thumb = document.createElement('img');
+        thumb.src = imgSrc;
+        thumb.className = `modal-thumb ${index === 0 ? 'active' : ''}`;
+        thumb.onclick = function() {
+            mainImg.src = imgSrc;
+            document.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
+            thumb.classList.add('active');
+        };
+        thumbContainer.appendChild(thumb);
+    });
+
+    // Show modal with animation
+    document.getElementById('productModal').classList.add('active');
+    document.body.style.overflow = 'hidden'; // Prevent body scroll
+}
+
+// ADD TO BASKET — saves the currently open product to the cart (localStorage)
+document.getElementById('modalAddToCart').addEventListener('click', () => {
+    if (!currentProduct) return;
+    addToCart(currentProduct);
+
+    const btn = document.getElementById('modalAddToCart');
+    const original = btn.textContent;
+    btn.textContent = 'Added ✓';
+    setTimeout(() => { btn.textContent = original; }, 1200);
+});
+
+// BUY NOW — saves the product to the cart, then jumps straight to checkout
+document.getElementById('modalBuyNow').addEventListener('click', () => {
+    if (!currentProduct) return;
+    addToCart(currentProduct);
+    window.location.href = 'cart.html';
+});
+
+function closeProductModal() {
+    document.getElementById('productModal').classList.remove('active');
+    document.body.style.overflow = ''; // Restore body scroll
+}
+
+function closeModalOnOverlay(e) {
+    if (e.target.id === 'productModal') {
+        closeProductModal();
+    }
+}
+    </script>
+</body>
+</html>

@@ -1156,7 +1156,7 @@ body {
 .site-footer {
     width: 100%;
     margin-top: 40px;
-    padding: 24px 16px 85px 16px; /* Reduced from 120px to a tight 85px */
+    padding: 24px 16px calc(120px + env(safe-area-inset-bottom)) 16px; /* Extra clearance so the floating nav never covers the copyright line */
     background: rgba(255, 255, 255, 0.35);
     backdrop-filter: blur(10px) saturate(120%);
     -webkit-backdrop-filter: blur(10px) saturate(120%);
